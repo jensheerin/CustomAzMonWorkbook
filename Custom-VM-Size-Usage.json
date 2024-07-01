@@ -1,245 +1,57 @@
 {
-  "version": "Notebook/1.0",
-  "items": [
-    {
-      "type": 9,
-      "content": {
-        "version": "KqlParameterItem/1.0",
-        "parameters": [
-          {
-            "id": "7416ba3a-85c8-48fc-a1ef-2c0f7c8e38a1",
-            "version": "KqlParameterItem/1.0",
-            "name": "Subscription",
-            "type": 6,
-            "typeSettings": {
-              "additionalResourceOptions": [],
-              "includeAll": false
-            },
-            "timeContext": {
-              "durationMs": 86400000
-            },
-            "value": null
-          },
-          {
-            "id": "1d61618d-1f73-4eec-a4c0-e2bc2ef1b70f",
-            "version": "KqlParameterItem/1.0",
-            "name": "LAWId",
-            "label": "Log Analytics workspace",
-            "type": 5,
-            "query": "resources\n| where type == \"microsoft.operationalinsights/workspaces\"\n| project id",
-            "crossComponentResources": [
-              "value::tenant"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": []
-            },
-            "queryType": 1,
-            "resourceType": "microsoft.resources/tenants",
-            "value": null
-          }
-        ],
-        "style": "pills",
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources"
-      },
-      "customWidth": "50",
-      "name": "parameters - 1"
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workbookDisplayName": {
+      "type": "string",
+      "defaultValue": "Custom VM Size and Usage",
+      "metadata": {
+        "description": "The friendly name for the workbook that is used in the Gallery or Saved List.  This name must be unique within a resource group."
+      }
     },
-    {
-      "type": 9,
-      "content": {
-        "version": "KqlParameterItem/1.0",
-        "parameters": [
-          {
-            "version": "KqlParameterItem/1.0",
-            "name": "showHidden",
-            "label": "Show Hidden Items",
-            "type": 10,
-            "isRequired": true,
-            "typeSettings": {
-              "additionalResourceOptions": [],
-              "showDefault": false
-            },
-            "jsonData": "[\n    { \"value\":\"yes\", \"label\":\"Yes\",\"default\": \"yes\" },\n    { \"value\":\"no\", \"label\":\"No\" }\n]",
-            "timeContext": {
-              "durationMs": 86400000
-            },
-            "value": "no",
-            "id": "f538abc2-3e09-45aa-a81e-b966a64e0703"
-          }
-        ],
-        "style": "above",
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces"
-      },
-      "customWidth": "50",
-      "name": "showHelpparameter"
+    "workbookType": {
+      "type": "string",
+      "defaultValue": "workbook",
+      "metadata": {
+        "description": "The gallery that the workbook will been shown under. Supported values include workbook, tsg, etc. Usually, this is 'workbook'"
+      }
     },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":null,\"headers\":[],\"method\":\"GET\",\"path\":\"{Subscription}/providers/Microsoft.Compute/skus?api-version=2021-07-01&$filter=location eq 'westus'\",\"urlParams\":[{\"key\":\"ContentType\",\"value\":\"\\\"application/json\\\"\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.value[?(@.resourceType=='virtualMachines')]\",\"columns\":[{\"path\":\"$.resourceType\",\"columnid\":\"type\"},{\"path\":\"$.name\",\"columnid\":\"VMSize\"},{\"path\":\"$.capabilities[?(@.name=='vCPUs')].value\",\"columnid\":\"vCPUs\"},{\"path\":\"$.capabilities[?(@.name=='MemoryGB')].value\",\"columnid\":\"Memory\"}]}}]}",
-        "size": 0,
-        "queryType": 12
-      },
-      "conditionalVisibility": {
-        "parameterName": "showHidden",
-        "comparison": "isEqualTo",
-        "value": "yes"
-      },
-      "name": "query - 0"
+    "workbookSourceId": {
+      "type": "string",
+      "defaultValue": "Azure Monitor",
+      "metadata": {
+        "description": "The id of resource instance to which the workbook will be associated"
+      }
     },
+    "workbookId": {
+      "type": "string",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "The unique guid for this workbook instance"
+      }
+    }
+  },
+  "resources": [
     {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "resources\n| where type =~ 'microsoft.compute/virtualmachines' | project VMSize = tostring(properties.hardwareProfile.vmSize), name",
-        "size": 0,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "{Subscription}"
-        ]
-      },
-      "conditionalVisibility": {
-        "parameterName": "showHidden",
-        "comparison": "isEqualTo",
-        "value": "yes"
-      },
-      "name": "query - 2"
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"66e2ca62-ea21-4b7b-b232-d90ae6467091\",\"mergeType\":\"innerunique\",\"leftTable\":\"query - 0\",\"rightTable\":\"query - 2\",\"leftColumn\":\"VMSize\",\"rightColumn\":\"VMSize\"}],\"projectRename\":[{\"originalName\":\"[query - 2].name\",\"mergedName\":\"VMName\",\"fromId\":\"66e2ca62-ea21-4b7b-b232-d90ae6467091\"},{\"originalName\":\"[query - 0].VMSize\",\"mergedName\":\"VMSize\",\"fromId\":\"unknown\"},{\"originalName\":\"[query - 0].vCPUs\",\"mergedName\":\"vCPUs\",\"fromId\":\"66e2ca62-ea21-4b7b-b232-d90ae6467091\"},{\"originalName\":\"[query - 0].Memory\",\"mergedName\":\"Memory\",\"fromId\":\"unknown\"},{\"originalName\":\"[query - 0].type\"},{\"originalName\":\"[query - 2].VMSize\"},{\"originalName\":\"[query - 2].osDiskGB\"},{\"originalName\":\"[query - 0].OSDiskGB\"},{\"originalName\":\"[query - 2].diskSizeGB\"}]}",
-        "size": 0,
-        "queryType": 7,
-        "gridSettings": {
-          "sortBy": [
-            {
-              "itemKey": "VMName",
-              "sortOrder": 1
-            }
-          ]
-        },
-        "sortBy": [
-          {
-            "itemKey": "VMName",
-            "sortOrder": 1
-          }
-        ]
-      },
-      "conditionalVisibility": {
-        "parameterName": "Subscription",
-        "comparison": "isNotEqualTo",
-        "value": "<>"
-      },
-      "customWidth": "50",
-      "name": "query - 3"
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "let CpuUsage = Perf\r\n| where ObjectName == 'Processor Information' and CounterName == '% Processor Time'\r\n| where TimeGenerated >= ago(7d)\r\n| summarize Cpu = percentile(CounterValue, 95) by Computer;\r\nlet MemoryAvailable = Perf\r\n| where ObjectName == 'Memory' and CounterName == 'Available MBytes'\r\n| where TimeGenerated >= ago(7d)\r\n| summarize AvgAvailableMemory = avg(CounterValue) by Computer;\r\nCpuUsage\r\n| join kind=inner MemoryAvailable on Computer\r\n| project Computer, Cpu, AvgAvailableMemory",
-        "size": 0,
-        "timeContext": {
-          "durationMs": 604800000
-        },
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces",
-        "crossComponentResources": [
-          "{LAWId}"
-        ],
-        "visualization": "table",
-        "gridSettings": {
-          "formatters": [
-            {
-              "columnMatch": "Cpu",
-              "formatter": 18,
-              "formatOptions": {
-                "thresholdsOptions": "icons",
-                "thresholdsGrid": [
-                  {},
-                  {
-                    "operator": ">",
-                    "thresholdValue": "80",
-                    "representation": "4",
-                    "text": "{0}{1}"
-                  },
-                  {
-                    "operator": ">",
-                    "thresholdValue": "60",
-                    "representation": "2",
-                    "text": "{0}{1}"
-                  },
-                  {
-                    "operator": "Default",
-                    "thresholdValue": null,
-                    "representation": "success",
-                    "text": "{0}{1}"
-                  }
-                ]
-              },
-              "numberFormat": {
-                "unit": 1,
-                "options": {
-                  "style": "decimal"
-                }
-              }
-            },
-            {
-              "columnMatch": "AvgAvailableMemory",
-              "formatter": 0,
-              "numberFormat": {
-                "unit": 4,
-                "options": {
-                  "style": "decimal"
-                }
-              }
-            },
-            {
-              "columnMatch": "Memory",
-              "formatter": 0,
-              "numberFormat": {
-                "unit": 4,
-                "options": {
-                  "style": "decimal"
-                }
-              }
-            },
-            {
-              "columnMatch": "Trend",
-              "formatter": 9,
-              "formatOptions": {
-                "min": 60,
-                "max": 80,
-                "palette": "greenRed"
-              }
-            }
-          ],
-          "sortBy": [
-            {
-              "itemKey": "Computer",
-              "sortOrder": 1
-            }
-          ]
-        },
-        "sortBy": [
-          {
-            "itemKey": "Computer",
-            "sortOrder": 1
-          }
-        ]
-      },
-      "customWidth": "50",
-      "name": "query - 4"
+      "name": "[parameters('workbookId')]",
+      "type": "microsoft.insights/workbooks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2022-04-01",
+      "dependsOn": [],
+      "kind": "shared",
+      "properties": {
+        "displayName": "[parameters('workbookDisplayName')]",
+        "serializedData": "{\"version\":\"Notebook/1.0\",\"items\":[{\"type\":9,\"content\":{\"version\":\"KqlParameterItem/1.0\",\"parameters\":[{\"id\":\"7416ba3a-85c8-48fc-a1ef-2c0f7c8e38a1\",\"version\":\"KqlParameterItem/1.0\",\"name\":\"Subscription\",\"type\":6,\"typeSettings\":{\"additionalResourceOptions\":[],\"includeAll\":false},\"timeContext\":{\"durationMs\":86400000},\"value\":\"/subscriptions/b0aeeba8-4430-4cf1-acbc-6e24cadf86c9\"},{\"id\":\"1d61618d-1f73-4eec-a4c0-e2bc2ef1b70f\",\"version\":\"KqlParameterItem/1.0\",\"name\":\"LAWId\",\"label\":\"Log Analytics workspace\",\"type\":5,\"query\":\"resources\\n| where type == \\\"microsoft.operationalinsights/workspaces\\\"\\n| project id\",\"crossComponentResources\":[\"value::tenant\"],\"typeSettings\":{\"additionalResourceOptions\":[]},\"queryType\":1,\"resourceType\":\"microsoft.resources/tenants\",\"value\":\"/subscriptions/b0aeeba8-4430-4cf1-acbc-6e24cadf86c9/resourceGroups/js-vnethub-eastus/providers/Microsoft.OperationalInsights/workspaces/law-platform\"}],\"style\":\"pills\",\"queryType\":1,\"resourceType\":\"microsoft.resourcegraph/resources\"},\"customWidth\":\"50\",\"name\":\"parameters - 1\"},{\"type\":9,\"content\":{\"version\":\"KqlParameterItem/1.0\",\"parameters\":[{\"version\":\"KqlParameterItem/1.0\",\"name\":\"showHidden\",\"label\":\"Show Hidden Items\",\"type\":10,\"isRequired\":true,\"typeSettings\":{\"additionalResourceOptions\":[],\"showDefault\":false},\"jsonData\":\"[\\n    { \\\"value\\\":\\\"yes\\\", \\\"label\\\":\\\"Yes\\\",\\\"default\\\": \\\"yes\\\" },\\n    { \\\"value\\\":\\\"no\\\", \\\"label\\\":\\\"No\\\" }\\n]\",\"timeContext\":{\"durationMs\":86400000},\"value\":\"no\",\"id\":\"f538abc2-3e09-45aa-a81e-b966a64e0703\"}],\"style\":\"above\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\"},\"customWidth\":\"50\",\"name\":\"showHelpparameter\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"ARMEndpoint/1.0\\\",\\\"data\\\":null,\\\"headers\\\":[],\\\"method\\\":\\\"GET\\\",\\\"path\\\":\\\"{Subscription}/providers/Microsoft.Compute/skus?api-version=2021-07-01&$filter=location eq 'westus'\\\",\\\"urlParams\\\":[{\\\"key\\\":\\\"ContentType\\\",\\\"value\\\":\\\"\\\\\\\"application/json\\\\\\\"\\\"}],\\\"batchDisabled\\\":false,\\\"transformers\\\":[{\\\"type\\\":\\\"jsonpath\\\",\\\"settings\\\":{\\\"tablePath\\\":\\\"$.value[?(@.resourceType=='virtualMachines')]\\\",\\\"columns\\\":[{\\\"path\\\":\\\"$.resourceType\\\",\\\"columnid\\\":\\\"type\\\"},{\\\"path\\\":\\\"$.name\\\",\\\"columnid\\\":\\\"VMSize\\\"},{\\\"path\\\":\\\"$.capabilities[?(@.name=='vCPUs')].value\\\",\\\"columnid\\\":\\\"vCPUs\\\"},{\\\"path\\\":\\\"$.capabilities[?(@.name=='MemoryGB')].value\\\",\\\"columnid\\\":\\\"Memory\\\"}]}}]}\",\"size\":0,\"queryType\":12},\"conditionalVisibility\":{\"parameterName\":\"showHidden\",\"comparison\":\"isEqualTo\",\"value\":\"yes\"},\"name\":\"query - 0\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"resources\\n| where type =~ 'microsoft.compute/virtualmachines' | project VMSize = tostring(properties.hardwareProfile.vmSize), name\",\"size\":0,\"queryType\":1,\"resourceType\":\"microsoft.resourcegraph/resources\",\"crossComponentResources\":[\"{Subscription}\"]},\"conditionalVisibility\":{\"parameterName\":\"showHidden\",\"comparison\":\"isEqualTo\",\"value\":\"yes\"},\"name\":\"query - 2\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"Merge/1.0\\\",\\\"merges\\\":[{\\\"id\\\":\\\"66e2ca62-ea21-4b7b-b232-d90ae6467091\\\",\\\"mergeType\\\":\\\"innerunique\\\",\\\"leftTable\\\":\\\"query - 0\\\",\\\"rightTable\\\":\\\"query - 2\\\",\\\"leftColumn\\\":\\\"VMSize\\\",\\\"rightColumn\\\":\\\"VMSize\\\"}],\\\"projectRename\\\":[{\\\"originalName\\\":\\\"[query - 2].name\\\",\\\"mergedName\\\":\\\"VMName\\\",\\\"fromId\\\":\\\"66e2ca62-ea21-4b7b-b232-d90ae6467091\\\"},{\\\"originalName\\\":\\\"[query - 0].VMSize\\\",\\\"mergedName\\\":\\\"VMSize\\\",\\\"fromId\\\":\\\"unknown\\\"},{\\\"originalName\\\":\\\"[query - 0].vCPUs\\\",\\\"mergedName\\\":\\\"vCPUs\\\",\\\"fromId\\\":\\\"66e2ca62-ea21-4b7b-b232-d90ae6467091\\\"},{\\\"originalName\\\":\\\"[query - 0].Memory\\\",\\\"mergedName\\\":\\\"Memory\\\",\\\"fromId\\\":\\\"unknown\\\"},{\\\"originalName\\\":\\\"[query - 0].type\\\"},{\\\"originalName\\\":\\\"[query - 2].VMSize\\\"},{\\\"originalName\\\":\\\"[query - 2].osDiskGB\\\"},{\\\"originalName\\\":\\\"[query - 0].OSDiskGB\\\"},{\\\"originalName\\\":\\\"[query - 2].diskSizeGB\\\"}]}\",\"size\":0,\"queryType\":7,\"gridSettings\":{\"sortBy\":[{\"itemKey\":\"VMName\",\"sortOrder\":1}]},\"sortBy\":[{\"itemKey\":\"VMName\",\"sortOrder\":1}]},\"customWidth\":\"50\",\"conditionalVisibility\":{\"parameterName\":\"Subscription\",\"comparison\":\"isNotEqualTo\",\"value\":\"<>\"},\"name\":\"query - 3\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"let CpuUsage = Perf\\r\\n| where ObjectName == 'Processor Information' and CounterName == '% Processor Time'\\r\\n| where TimeGenerated >= ago(7d)\\r\\n| summarize Cpu = percentile(CounterValue, 95) by Computer;\\r\\nlet MemoryAvailable = Perf\\r\\n| where ObjectName == 'Memory' and CounterName == 'Available MBytes'\\r\\n| where TimeGenerated >= ago(7d)\\r\\n| summarize AvgAvailableMemory = avg(CounterValue) by Computer;\\r\\nCpuUsage\\r\\n| join kind=inner MemoryAvailable on Computer\\r\\n| project Computer, Cpu, AvgAvailableMemory\",\"size\":0,\"timeContext\":{\"durationMs\":604800000},\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"crossComponentResources\":[\"{LAWId}\"],\"visualization\":\"table\",\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"Cpu\",\"formatter\":18,\"formatOptions\":{\"thresholdsOptions\":\"icons\",\"thresholdsGrid\":[{},{\"operator\":\">\",\"thresholdValue\":\"80\",\"representation\":\"4\",\"text\":\"{0}{1}\"},{\"operator\":\">\",\"thresholdValue\":\"60\",\"representation\":\"2\",\"text\":\"{0}{1}\"},{\"operator\":\"Default\",\"thresholdValue\":null,\"representation\":\"success\",\"text\":\"{0}{1}\"}]},\"numberFormat\":{\"unit\":1,\"options\":{\"style\":\"decimal\"}}},{\"columnMatch\":\"AvgAvailableMemory\",\"formatter\":0,\"numberFormat\":{\"unit\":4,\"options\":{\"style\":\"decimal\"}}},{\"columnMatch\":\"Memory\",\"formatter\":0,\"numberFormat\":{\"unit\":4,\"options\":{\"style\":\"decimal\"}}},{\"columnMatch\":\"Trend\",\"formatter\":9,\"formatOptions\":{\"min\":60,\"max\":80,\"palette\":\"greenRed\"}}],\"sortBy\":[{\"itemKey\":\"Computer\",\"sortOrder\":1}]},\"sortBy\":[{\"itemKey\":\"Computer\",\"sortOrder\":1}]},\"customWidth\":\"50\",\"name\":\"query - 4\"}],\"isLocked\":false,\"fallbackResourceIds\":[\"Azure Monitor\"]}",
+        "version": "1.0",
+        "sourceId": "[parameters('workbookSourceId')]",
+        "category": "[parameters('workbookType')]"
+      }
     }
   ],
-  "fallbackResourceIds": [
-    "Azure Monitor"
-  ],
-  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+  "outputs": {
+    "workbookId": {
+      "type": "string",
+      "value": "[resourceId( 'microsoft.insights/workbooks', parameters('workbookId'))]"
+    }
+  },
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#"
 }
