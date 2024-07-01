@@ -34,7 +34,7 @@ Users can customize the report to fit their specific needs by adjusting the Kust
 To use this report, import the `Custom-VM-Size-Usage.json` file into Azure Monitor Workbooks. Once imported, the report will automatically populate with data from your Azure environment, assuming the necessary monitoring and diagnostics settings are enabled.
 
 You can deploy the workbook by clicking on the button below:<br />
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjensheerin%2FCustomAzMonWorkbook%2Fmain%2Ftemplate.json" target="_blank"><img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjensheerin%2FCustomAzMonWorkbook%2Fmain%2FCustom-VM-Size-Usage.json" target="_blank"><img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a>
 <br>
 
 ## Conclusion
