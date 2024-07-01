@@ -41,6 +41,6 @@ You can deploy the workbook by clicking on the button below:<br />
 
 The Custom VM Size Usage report is an essential tool for administrators looking to optimize environments. By providing detailed insights into VM performance and usage trends, it enables informed decision-making regarding VM sizing and resource allocation.
 
-![Sample output](./image/Screenshot.png) 
+![Sample output](./image/sample.png) 
 
 For more information on configuring and using Azure Monitor Workbooks, please refer to the [official documentation](https://docs.microsoft.com/azure/azure-monitor/visualize/workbooks-overview).
