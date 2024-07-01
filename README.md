@@ -39,6 +39,6 @@ To use this report, import the `Custom-VM-Size-Usage.json` file into Azure Monit
 
 The Custom VM Size Usage report is an essential tool for administrators looking to optimize environments. By providing detailed insights into VM performance and usage trends, it enables informed decision-making regarding VM sizing and resource allocation.
 
-[Sample output](./image/Screenshot.png) 
+![Sample output](./image/Screenshot.png) 
 
 For more information on configuring and using Azure Monitor Workbooks, please refer to the [official documentation](https://docs.microsoft.com/azure/azure-monitor/visualize/workbooks-overview).
