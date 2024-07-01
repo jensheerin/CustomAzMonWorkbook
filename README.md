@@ -1,6 +1,13 @@
 # Custom VM Size Usage Workbook
 
+The CustomAzMonWorkbook is a custom Azure Monitor workbook that allows you to visualize and analyze the performance and utilization of your Azure virtual machines (VMs) in a single dashboard. Unlike the default Azure Monitor workbooks, which only show aggregated metrics for all VMs in a resource group or subscription, the CustomAzMonWorkbook displays the provisioned vCPUs and memory based on the Azure VM SKU and the CPU usage and available memory for each individual VM. This gives you a more granular and accurate view of how your VMs are consuming resources and how much headroom you have for scaling up or down.
+
 This document provides an overview of the `Custom-VM-Size-Usage.json` file, which is designed to offer insights into the usage and performance of Azure VMs. The Workbook is structured to assist understanding at a glance based on the VM sku the provisioned vCPUs, Memory size then CPU and Memory usage
+
+It can help give you insights into the following questions:
+- How many vCPUs and memory are allocated to each VM according to its SKU?
+- How much CPU and memory are actually used by each VM over time?
+- Which VMs are underutilized or overutilized in terms of CPU and memory?
 
 ## Overview
 
@@ -31,7 +38,13 @@ Users can customize the report to fit their specific needs by adjusting the Kust
 
 ## Usage
 
-To use this report, import the `Custom-VM-Size-Usage.json` file into Azure Monitor Workbooks. Once imported, the report will automatically populate with data from your Azure environment, assuming the necessary monitoring and diagnostics settings are enabled.
+# Pre-requistes
+To use the CustomAzMonWorkbook, you need to have the following prerequisites:
+- An Azure subscription with one or more VMs running
+- The Azure Monitor agent installed on each VM
+- The Log Analytics workspace connected to the Azure Monitor agent
+
+Import the `Custom-VM-Size-Usage.json` file into Azure Monitor Workbooks. Once imported, the report will automatically populate with data from your Azure environment, assuming the necessary monitoring and diagnostics settings are enabled.
 
 You can deploy the workbook by clicking on the button below:<br />
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjensheerin%2FCustomAzMonWorkbook%2Fmain%2FCustom-VM-Size-Usage.json" target="_blank"><img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a>
@@ -40,6 +53,8 @@ You can deploy the workbook by clicking on the button below:<br />
 ## Conclusion
 
 The Custom VM Size Usage report is an essential tool for administrators looking to optimize environments. By providing detailed insights into VM performance and usage trends, it enables informed decision-making regarding VM sizing and resource allocation.
+
+The workbook will display two tables for your selected VMs. The first table shows the provisioned vCPUs and memory for each VM based on its SKU. The second table shows the average and maximum CPU usage and available memory for each VM over the selected time range. 
 
 ![Sample output](./image/sample.png) 
 
