@@ -38,7 +38,7 @@ Users can customize the report to fit their specific needs by adjusting the Kust
 
 ## Usage
 
-# Pre-requistes
+### Pre-requistes
 To use the CustomAzMonWorkbook, you need to have the following prerequisites:
 - An Azure subscription with one or more VMs running
 - The Azure Monitor agent installed on each VM
